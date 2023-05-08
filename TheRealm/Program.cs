@@ -1,6 +1,8 @@
 using NLog;
 using NLog.Web;
+using StackExchange.Redis;
 using TheRealm.Middlewares;
+using TheRealm.Services;
 
 namespace TheRealm
 {
@@ -8,6 +10,7 @@ namespace TheRealm
     {
         public static void Main(string[] args)
         {
+            var multiplexer = ConnectionMultiplexer.Connect("localhost");
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -17,6 +20,9 @@ namespace TheRealm
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
+
+            builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+            builder.Services.AddSingleton<IRedisService, RedisService>();
 
             // Add Logger
             builder.Logging.ClearProviders();

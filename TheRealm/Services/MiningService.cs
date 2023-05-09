@@ -1,11 +1,12 @@
 ﻿using TheRealm.Middlewares;
+using TheRealm.Utils;
 
 namespace TheRealm.Services
 {
-    public class MiningService
+    public class MiningService : IMiningService
     {
         private readonly IRedisService _redisService;
-        private Random _random;
+        private ProductionUtils _productionUtils;
         private int _tools;
 
         private const string GoldKey = "gold";
@@ -16,49 +17,32 @@ namespace TheRealm.Services
         public MiningService(IRedisService redisService)
         {
             _redisService = redisService;
-            _random = new Random();
+            _productionUtils = new ProductionUtils();
             _tools = Convert.ToInt32(_redisService.GetFromDatabase(ServiceKey).Result);
         }
 
-        public Dictionary<string, int> GetCoal() 
+        public Dictionary<string, int> GetCoal()
         {
-            var coalProduced = GenerateCargoValue();
-            var avilableTools = _tools - coalProduced;
-            if (avilableTools > 0) { 
+            var coal = _productionUtils.ProduceResource(CoalKey, ServiceKey, _tools, _redisService);
 
-                _redisService.SaveToDatabase(ServiceKey, (avilableTools).ToString());
-                _redisService.SaveToDatabase(GoldKey,coalProduced.ToString());
-            }
-
-            return new Dictionary<string, int> { { CoalKey, coalProduced } };
+            return new Dictionary<string, int> { { CoalKey, coal } };
         }
 
-        public Dictionary<string, int> GetIron() 
+        public Dictionary<string, int> GetIron()
         {
-            var ironProduced = GenerateCargoValue();
-            var avilableTools = _tools - ironProduced;
-            if (avilableTools > 0)
-            {
-                _redisService.SaveToDatabase(ServiceKey, (avilableTools).ToString());
-                _redisService.SaveToDatabase(IronKey, ironProduced.ToString());
-
-            }
-            return new Dictionary<string, int> { { IronKey, ironProduced } };
+            var iron = _productionUtils.ProduceResource(IronKey, ServiceKey, _tools, _redisService);
+            
+            return new Dictionary<string, int> { { IronKey, iron } };
         }
 
-        public Dictionary<string, int> GetGold() 
+        public Dictionary<string, int> GetGold()
         {
-            var goldProduced = GenerateCargoValue();
-            var avilableTools = _tools - goldProduced;
-            if (avilableTools > 0)
-            {
-                _redisService.SaveToDatabase(ServiceKey, (avilableTools).ToString());
-                _redisService.SaveToDatabase(GoldKey, goldProduced.ToString());
-            }
-            return new Dictionary<string, int> { { GoldKey, goldProduced } };
+            var gold = _productionUtils.ProduceResource(GoldKey, ServiceKey, _tools, _redisService);
+            
+            return new Dictionary<string, int> { { GoldKey, gold } };
         }
 
         public string SendTools(int value) => "Received";
-        private int GenerateCargoValue() => _random.Next(0, 10);
+    
     }
 }

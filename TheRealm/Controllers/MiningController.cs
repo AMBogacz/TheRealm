@@ -7,15 +7,15 @@ namespace TheRealm.Controllers
     [ApiController]
     public class MiningController : ControllerBase
     {
-        private readonly MiningService _miningService;
-        public MiningController(MiningService miningService)
+        private readonly IMiningService _miningService;
+        public MiningController(IMiningService miningService)
         {
             _miningService= miningService;
         }
 
         [HttpGet]
         [Route("GetIron")]
-        public ActionResult GetIron()
+        public IActionResult GetIron()
         {
             var iron = _miningService.GetIron();
             return Ok(iron);
@@ -23,7 +23,7 @@ namespace TheRealm.Controllers
 
         [HttpGet]
         [Route("GetCoal")]
-        public ActionResult GetCoal()
+        public IActionResult GetCoal()
         {
             var coal = _miningService.GetCoal();
             return Ok(coal);
@@ -31,10 +31,27 @@ namespace TheRealm.Controllers
 
         [HttpGet]
         [Route("GetGold")]
-        public ActionResult GetGold()
+        public IActionResult GetGold()
         {
             var gold = _miningService.GetGold();
             return Ok(gold);
         }
+
+        [HttpGet]
+        [Route("SendTools/{toolsAmount}")]
+        public IActionResult SendTools(int toolsAmount)
+        {
+            try
+            {
+                var success = _miningService.SendTools(toolsAmount);
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+            
+        }
+
     }
 }

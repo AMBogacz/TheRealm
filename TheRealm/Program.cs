@@ -23,6 +23,8 @@ namespace TheRealm
 
             builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
             builder.Services.AddSingleton<IRedisService, RedisService>();
+            builder.Services.AddScoped<IMiningService, MiningService>();
+            builder.Services.AddScoped<ILumberMillService, LumberMillService>();
 
             // Add Logger
             builder.Logging.ClearProviders();

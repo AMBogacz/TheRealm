@@ -1,0 +1,5 @@
+### Test GetWood()
+GET http://localhost:5127/lumbermill/getwood
+
+### Test SendTools()
+GET http://localhost:5127/lumbermill/sendtools/10

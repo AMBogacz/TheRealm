@@ -19,7 +19,12 @@
         public Dictionary<string, int> GetWood()
         {
             var woodProduced = GenerateCargoValue();
-            _redisService.SaveToDatabase(ServiceKey, (_tools - woodProduced).ToString());
+            var avilableTools = _tools - woodProduced;
+            if(avilableTools > 0 )
+            {
+                _redisService.SaveToDatabase(ServiceKey, (avilableTools).ToString());
+                _redisService.SaveToDatabase(CargoKey, woodProduced.ToString());
+            }
             return new Dictionary<string, int> { { CargoKey, woodProduced } };
         }
 

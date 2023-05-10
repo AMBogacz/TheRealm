@@ -1,5 +1,6 @@
 ﻿using TheRealm.Middlewares;
 using TheRealm.Utils;
+using TheRealm.Entities;
 
 namespace TheRealm.Services
 {
@@ -9,10 +10,10 @@ namespace TheRealm.Services
         private ProductionUtils _productionUtils;
         private int _tools;
 
-        private const string GoldKey = "gold";
-        private const string IronKey = "iron";
-        private const string CoalKey = "coal";
-        private const string ServiceKey = "mining";
+        private string GoldKey = Product.Gold.ToString();
+        private string IronKey = Product.Iron.ToString();
+        private string CoalKey = Product.Coal.ToString();
+        private string ServiceKey = ServiceType.Mine.ToString();
 
         public MiningService(IRedisService redisService)
         {

@@ -1,13 +1,14 @@
-﻿namespace TheRealm.Services
+﻿using TheRealm.Entities;
+namespace TheRealm.Services
 {
     public class GovernmentService
     {
         private readonly IRedisService _redisService;
         public Dictionary<string,int> resourcesDict;
-        private string GoldKey = "gold";
-        private string IronKey = "iron";
-        private string CoalKey = "coal";
-        private string WoodKey = "wood";
+        private string GoldKey = Product.Gold.ToString();
+        private string IronKey = Product.Iron.ToString();
+        private string CoalKey = Product.Coal.ToString();
+        private string WoodKey = Product.Wood.ToString();
 
         public GovernmentService(IRedisService redisService)
         {

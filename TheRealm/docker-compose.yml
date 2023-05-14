@@ -1,0 +1,23 @@
+version: '2'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  redis:
+    image: 'redis:latest'
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - app-network
+  therealm:
+    image: 'the-realm:v1'
+    ports:
+      - '8080:80'
+    depends_on:
+      - 'redis'
+    networks:
+      - app-network

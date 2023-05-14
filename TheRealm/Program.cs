@@ -10,7 +10,13 @@ namespace TheRealm
     {
         public static void Main(string[] args)
         {
-            var multiplexer = ConnectionMultiplexer.Connect("localhost");
+            var options = new ConfigurationOptions
+            {
+                AbortOnConnectFail = false,
+                ClientName = "localhost",
+                EndPoints = { { "localhost", 6379} }
+            };
+            var multiplexer = ConnectionMultiplexer.Connect(options);
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

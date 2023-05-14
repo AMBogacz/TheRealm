@@ -1,0 +1,22 @@
+#### LubmerMill
+### Test GetWood()
+GET http://localhost:8080/lumbermill/getwood
+
+### Test SendTools()
+#GET http://localhost:5127/lumbermill/sendtools/10
+GET http://localhost:8080/lumbermill/sendtools/10
+
+#### Mining
+### Test GetIron()
+GET http://localhost:5127/mining/getiron
+
+### Test GetGold()
+GET http://localhost:5127/mining/getgold
+
+### Test GetCoal()
+GET http://localhost:5127/mining/getcoal
+
+### Test SendTools()
+GET http://localhost:5127/mining/sendtools/10
+
+#### Tading 

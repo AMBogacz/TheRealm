@@ -1,30 +1,32 @@
-﻿namespace TheRealm.Services
+﻿using TheRealm.Entities;
+using TheRealm.Utils;
+
+namespace TheRealm.Services
 {
-    public class LumberMillService
+    public class LumberMillService : ILumberMillService
     {
         private readonly IRedisService _redisService;
-        private Random _random;
+        private ProductionUtils _productionUtils;
         private int _tools;
 
-        private const string CargoKey = "wood";
-        private const string ServiceKey = "lumberMill";
+        private string ProductKey = Product.Wood.ToString();
+        private string ServiceKey = ServiceType.LumberMill.ToString();
 
         public LumberMillService(IRedisService redisService)
         {
             _redisService = redisService;
-            _random = new Random();
+            _productionUtils = new ProductionUtils();
             _tools = Convert.ToInt32(_redisService.GetFromDatabase(ServiceKey).Result);
         }
 
         public Dictionary<string, int> GetWood()
         {
-            var woodProduced = GenerateCargoValue();
-            _redisService.SaveToDatabase(ServiceKey, (_tools - woodProduced).ToString());
-            return new Dictionary<string, int> { { CargoKey, woodProduced } };
+            var wood = _productionUtils.ProduceResource(ProductKey, ServiceKey, _tools, _redisService);
+            Console.WriteLine(wood);
+            return new Dictionary<string, int> { { ProductKey, wood } };
         }
 
         public async Task<bool> SendTools(int value) => await _redisService.SaveToDatabase(ServiceKey, value.ToString());
 
-        private int GenerateCargoValue() => _random.Next(0, 10);
     }
 }

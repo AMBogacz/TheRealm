@@ -6,14 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["TheRealm/TheRealm.csproj", "TheRealm/"]
+COPY ["TheRealm.csproj", "TheRealm/"]
 RUN dotnet restore "TheRealm/TheRealm.csproj"
-COPY . .
+
 WORKDIR "/src/TheRealm"
-RUN dotnet build "TheRealm.csproj" -c Release -o /app/build
+COPY . .
+
+RUN dotnet build "TheRealm.csproj" -c Debug -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "TheRealm.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "TheRealm.csproj" -c Debug -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
